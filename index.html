@@ -240,40 +240,6 @@ section h2 {
 .btn-outline { border: 1px solid var(--border); color: var(--text); }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ─── RL DEMO ─── */
-.rl-container { max-width: 400px; }
-.rl-status {
-  font-size: 0.95rem; color: var(--heading); margin-bottom: 20px;
-  min-height: 1.4em;
-}
-.rl-board {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
-  margin-bottom: 20px;
-}
-.rl-cell {
-  aspect-ratio: 1; background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 8px; font-size: 2rem; font-family: var(--serif);
-  color: var(--heading); display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.15s; user-select: none;
-}
-.rl-cell:hover:not(.taken):not(.disabled) { border-color: var(--accent); background: var(--bg-card-hover); }
-.rl-cell.taken, .rl-cell.disabled { cursor: default; }
-.rl-cell.x { color: var(--accent); }
-.rl-cell.o { color: var(--accent-warm); }
-.rl-cell.win-cell { border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
-.rl-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-.rl-btn {
-  padding: 8px 20px; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
-  font-family: var(--sans); cursor: pointer; transition: all 0.2s; border: 1px solid var(--border);
-  background: var(--bg-card); color: var(--text);
-}
-.rl-btn:hover { border-color: var(--accent); color: var(--accent); }
-.rl-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
-.rl-scoreboard {
-  display: flex; gap: 24px; font-size: 0.8rem; color: var(--text-muted); margin-top: 16px;
-}
-.rl-scoreboard span { color: var(--heading); font-weight: 600; }
-
 /* ─── ANIMATIONS ─── */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 section { animation: fadeUp 0.6s ease both; }
@@ -308,7 +274,6 @@ section { animation: fadeUp 0.6s ease both; }
     <a href="#education"><span class="nav-dot"></span>Education</a>
     <a href="#experience"><span class="nav-dot"></span>Experience</a>
     <a href="#projects"><span class="nav-dot"></span>Projects</a>
-    <a href="#rl-demo"><span class="nav-dot"></span>Play My AI</a>
     <a href="#hackathons"><span class="nav-dot"></span>Hackathons</a>
     <a href="#skills"><span class="nav-dot"></span>Skills</a>
     <a href="#leadership"><span class="nav-dot"></span>Leadership</a>
@@ -473,29 +438,6 @@ section { animation: fadeUp 0.6s ease both; }
     </div>
   </section>
 
-  <!-- ═══ RL DEMO ═══ -->
-  <section id="rl-demo">
-    <span class="section-label">Live Demo</span>
-    <h2>Challenge My AI</h2>
-    <p class="section-desc">This agent learned Tic-Tac-Toe through 50,000 episodes of self-play using Q-Learning with temporal difference updates. It uses perspective-agnostic state encoding and board symmetry compression. Think you can beat it?</p>
-
-    <div class="rl-container">
-      <div class="rl-controls">
-        <button class="rl-btn active" id="btn-x" onclick="chooseSide('X')">Play as X (first)</button>
-        <button class="rl-btn" id="btn-o" onclick="chooseSide('O')">Play as O (second)</button>
-        <button class="rl-btn" onclick="resetGame()">New Game</button>
-      </div>
-      <div class="rl-status" id="rl-status">Your move.</div>
-      <div class="rl-board" id="rl-board"></div>
-      <div class="rl-scoreboard">
-        You: <span id="score-wins">0</span> &nbsp; AI: <span id="score-losses">0</span> &nbsp; Draws: <span id="score-draws">0</span>
-      </div>
-      <div style="margin-top:16px;">
-        <a href="https://github.com/Jordan-E-Hunt/TicTacToe-RL-Demo" target="_blank" style="font-size:0.78rem; color:var(--text-muted);">View source &amp; training code &rarr;</a>
-      </div>
-    </div>
-  </section>
-
   <!-- ═══ HACKATHONS ═══ -->
   <section id="hackathons">
     <span class="section-label">Hackathons</span>
@@ -637,196 +579,6 @@ function onScroll() {
 }
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
-
-// ═══ RL TIC-TAC-TOE DEMO ═══
-var Q_TABLE = {};
-var rlBoard = [0,0,0,0,0,0,0,0,0]; // 0=empty, 1=X, 2=O
-var rlCurrentPlayer = 1; // 1=X, 2=O
-var rlGameOver = false;
-var rlWinner = null;
-var rlPlayerSide = 1; // human plays as X by default
-var rlAgentSide = 2;
-var rlScores = {wins:0, losses:0, draws:0};
-var rlWinCells = [];
-
-// Load Q-table
-fetch('q_table.json')
-  .then(function(r){ return r.json(); })
-  .then(function(data){ Q_TABLE = data; renderBoard(); })
-  .catch(function(){ document.getElementById('rl-status').textContent = 'Could not load AI model.'; });
-
-function getState() {
-  // Perspective-agnostic: current player = 1, opponent = -1
-  var norm = [];
-  for (var i = 0; i < 9; i++) {
-    if (rlBoard[i] === 0) norm.push(0);
-    else if (rlBoard[i] === rlCurrentPlayer) norm.push(1);
-    else norm.push(-1);
-  }
-  var result = canonicalBoard(norm);
-  return result;
-}
-
-function canonicalBoard(flat) {
-  // Generate 4 rotations, return lex-smallest + rotation index
-  var candidates = [];
-  var current = flat.slice();
-  for (var r = 0; r < 4; r++) {
-    candidates.push(current.slice());
-    current = rot90(current);
-  }
-  var minIdx = 0;
-  for (var i = 1; i < candidates.length; i++) {
-    if (compareTuples(candidates[i], candidates[minIdx]) < 0) minIdx = i;
-  }
-  return { state: candidates[minIdx], rotation: minIdx };
-}
-
-function rot90(flat) {
-  // CCW rotation of 3x3 flattened: new[r][c] = old[c][2-r]
-  var out = new Array(9);
-  for (var r = 0; r < 3; r++)
-    for (var c = 0; c < 3; c++)
-      out[r * 3 + c] = flat[c * 3 + (2 - r)];
-  return out;
-}
-
-function compareTuples(a, b) {
-  for (var i = 0; i < a.length; i++) {
-    if (a[i] < b[i]) return -1;
-    if (a[i] > b[i]) return 1;
-  }
-  return 0;
-}
-
-function rotateAction(r, c, rotation) {
-  for (var i = 0; i < rotation; i++) {
-    var tmp = r; r = 2 - c; c = tmp;
-  }
-  return [r, c];
-}
-
-function getQValue(stateStr, actionStr) {
-  var key = stateStr + '|' + actionStr;
-  return Q_TABLE[key] || 0.0;
-}
-
-function agentMove() {
-  if (rlGameOver) return;
-  var result = getState();
-  var stateStr = result.state.join(',');
-  var rotation = result.rotation;
-
-  var avail = [];
-  for (var i = 0; i < 9; i++) {
-    if (rlBoard[i] === 0) avail.push(i);
-  }
-  if (avail.length === 0) return;
-
-  var bestIdx = 0;
-  var bestQ = -Infinity;
-  for (var i = 0; i < avail.length; i++) {
-    var r = Math.floor(avail[i] / 3);
-    var c = avail[i] % 3;
-    var canon = rotateAction(r, c, rotation);
-    var actionStr = canon[0] + ',' + canon[1];
-    var q = getQValue(stateStr, actionStr);
-    if (q > bestQ) { bestQ = q; bestIdx = i; }
-  }
-
-  var move = avail[bestIdx];
-  rlBoard[move] = rlCurrentPlayer;
-  checkWinner();
-  if (!rlGameOver) rlCurrentPlayer = rlCurrentPlayer === 1 ? 2 : 1;
-  renderBoard();
-}
-
-function humanMove(idx) {
-  if (rlGameOver || rlBoard[idx] !== 0 || rlCurrentPlayer !== rlPlayerSide) return;
-  rlBoard[idx] = rlCurrentPlayer;
-  checkWinner();
-  if (!rlGameOver) {
-    rlCurrentPlayer = rlCurrentPlayer === 1 ? 2 : 1;
-    renderBoard();
-    setTimeout(function(){ agentMove(); }, 250);
-  } else {
-    renderBoard();
-  }
-}
-
-function checkWinner() {
-  var lines = [
-    [0,1,2],[3,4,5],[6,7,8],
-    [0,3,6],[1,4,7],[2,5,8],
-    [0,4,8],[2,4,6]
-  ];
-  for (var i = 0; i < lines.length; i++) {
-    var a = lines[i][0], b = lines[i][1], c = lines[i][2];
-    if (rlBoard[a] !== 0 && rlBoard[a] === rlBoard[b] && rlBoard[b] === rlBoard[c]) {
-      rlGameOver = true;
-      rlWinner = rlBoard[a];
-      rlWinCells = [a, b, c];
-      if (rlWinner === rlPlayerSide) rlScores.wins++;
-      else rlScores.losses++;
-      return;
-    }
-  }
-  if (rlBoard.indexOf(0) === -1) {
-    rlGameOver = true;
-    rlWinner = 0;
-    rlScores.draws++;
-  }
-}
-
-function renderBoard() {
-  var boardEl = document.getElementById('rl-board');
-  boardEl.innerHTML = '';
-  for (var i = 0; i < 9; i++) {
-    var cell = document.createElement('div');
-    cell.className = 'rl-cell';
-    if (rlBoard[i] === 1) { cell.textContent = 'X'; cell.classList.add('taken', 'x'); }
-    else if (rlBoard[i] === 2) { cell.textContent = 'O'; cell.classList.add('taken', 'o'); }
-    if (rlGameOver) cell.classList.add('disabled');
-    if (rlWinCells.indexOf(i) !== -1) cell.classList.add('win-cell');
-    (function(idx){ cell.addEventListener('click', function(){ humanMove(idx); }); })(i);
-    boardEl.appendChild(cell);
-  }
-
-  var status = document.getElementById('rl-status');
-  if (rlGameOver) {
-    if (rlWinner === 0) status.textContent = "Draw!";
-    else if (rlWinner === rlPlayerSide) status.textContent = "You win!";
-    else status.textContent = "AI wins.";
-  } else if (rlCurrentPlayer === rlPlayerSide) {
-    status.textContent = "Your move.";
-  } else {
-    status.textContent = "AI is thinking...";
-  }
-
-  document.getElementById('score-wins').textContent = rlScores.wins;
-  document.getElementById('score-losses').textContent = rlScores.losses;
-  document.getElementById('score-draws').textContent = rlScores.draws;
-}
-
-function chooseSide(side) {
-  rlPlayerSide = side === 'X' ? 1 : 2;
-  rlAgentSide = side === 'X' ? 2 : 1;
-  document.getElementById('btn-x').className = 'rl-btn' + (side === 'X' ? ' active' : '');
-  document.getElementById('btn-o').className = 'rl-btn' + (side === 'O' ? ' active' : '');
-  resetGame();
-}
-
-function resetGame() {
-  rlBoard = [0,0,0,0,0,0,0,0,0];
-  rlCurrentPlayer = 1; // X always goes first
-  rlGameOver = false;
-  rlWinner = null;
-  rlWinCells = [];
-  renderBoard();
-  if (rlAgentSide === 1) {
-    setTimeout(function(){ agentMove(); }, 300);
-  }
-}
 </script>
 </body>
 </html>
