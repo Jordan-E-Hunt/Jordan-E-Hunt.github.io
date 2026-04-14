@@ -142,6 +142,8 @@ section h2 {
 .edu-logo svg { width: 100%; height: 100%; }
 .edu-body { flex: 1; }
 .edu-card h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--heading); margin-bottom: 4px; }
+.edu-card h3 a { color: var(--heading); }
+.edu-card h3 a:hover { color: var(--accent); }
 .edu-meta { font-size: 0.8rem; color: var(--accent); font-weight: 500; }
 .edu-detail { font-size: 0.82rem; color: var(--text-muted); margin-top: 8px; line-height: 1.7; }
 
@@ -240,6 +242,116 @@ section h2 {
 .btn-outline { border: 1px solid var(--border); color: var(--text); }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
+/* ─── HERO ANIMATION ─── */
+.hero-canvas {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; display: block;
+}
+#home { position: relative; overflow: hidden; }
+#home > *:not(.hero-canvas) { position: relative; z-index: 1; }
+
+/* ─── FEATURED PROJECT ─── */
+.featured-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 32px; transition: border-color 0.2s;
+}
+.featured-card:hover { border-color: var(--accent); }
+.featured-badge {
+  display: inline-block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--accent-warm); font-weight: 700; margin-bottom: 12px;
+  padding: 3px 10px; border: 1px solid rgba(212,146,108,0.3); border-radius: 100px;
+}
+.featured-card h3 { font-family: var(--serif); font-size: 1.15rem; color: var(--heading); margin-bottom: 10px; }
+.featured-card h3 a { color: var(--heading); }
+.featured-card h3 a:hover { color: var(--accent); }
+.featured-desc { font-size: 0.88rem; color: var(--text); line-height: 1.85; margin-bottom: 20px; }
+.featured-stats {
+  display: flex; gap: 32px; margin-bottom: 20px; padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.featured-stat-num { font-family: var(--serif); font-size: 1.3rem; color: var(--accent); display: block; }
+.featured-stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+.featured-demo-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--accent); font-weight: 600; margin-bottom: 16px; margin-top: 24px; display: block;
+}
+
+/* ─── BENTO PROJECTS ─── */
+.projects-bento {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.projects-bento .project-card.wide {
+  grid-column: 1 / -1;
+}
+@media (max-width: 768px) {
+  .projects-bento { grid-template-columns: 1fr; }
+}
+
+/* ─── PROJECT CAROUSEL ─── */
+.project-carousel {
+  position: relative; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px; margin-bottom: 14px; overflow: hidden;
+}
+.carousel-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.carousel-label {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--accent); font-weight: 600;
+}
+.carousel-counter { font-size: 0.72rem; color: var(--text-muted); }
+.carousel-viewport {
+  position: relative; overflow: hidden; border-radius: 6px; background: #fff;
+}
+.carousel-track { display: flex; transition: transform 0.3s ease; }
+.carousel-track img {
+  min-width: 100%; max-width: 100%; height: auto; display: block; object-fit: contain;
+}
+.carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%;
+  width: 32px; height: 32px; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s; z-index: 2;
+}
+.carousel-btn:hover { background: rgba(0,0,0,0.7); }
+.carousel-btn.prev { left: 8px; }
+.carousel-btn.next { right: 8px; }
+.carousel-dots {
+  display: flex; justify-content: center; gap: 6px; margin-top: 10px;
+}
+.carousel-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--border);
+  cursor: pointer; border: none; padding: 0; transition: all 0.2s;
+}
+.carousel-dot.active { background: var(--accent); }
+
+/* ─── TESTIMONIALS ─── */
+.testimonial-container { position: relative; overflow: hidden; }
+.testimonial-track { display: flex; transition: transform 0.4s ease; }
+.testimonial-slide {
+  min-width: 100%; padding: 28px 32px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+}
+.testimonial-quote {
+  font-family: var(--serif); font-size: 1.05rem; font-style: italic;
+  color: var(--text); line-height: 1.8; margin-bottom: 16px;
+}
+.testimonial-quote::before { content: '\201C'; color: var(--accent); font-size: 1.4rem; margin-right: 4px; }
+.testimonial-author { font-size: 0.82rem; color: var(--heading); font-weight: 600; }
+.testimonial-role { font-size: 0.75rem; color: var(--text-muted); }
+.testimonial-nav { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+.testimonial-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--border);
+  cursor: pointer; transition: all 0.2s; border: none; padding: 0;
+}
+.testimonial-dot.active { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
+/* ─── LOOKING FOR ─── */
+.looking-for {
+  font-size: 0.9rem; color: var(--text); line-height: 1.85;
+  max-width: 620px; margin-bottom: 32px; padding: 20px 24px;
+  border-left: 2px solid var(--accent); background: var(--accent-glow); border-radius: 0 8px 8px 0;
+}
+
 /* ─── RL DEMO ─── */
 .rl-container { max-width: 400px; }
 .rl-status {
@@ -307,8 +419,8 @@ section { animation: fadeUp 0.6s ease both; }
     <a href="#home" class="active"><span class="nav-dot"></span>Home</a>
     <a href="#education"><span class="nav-dot"></span>Education</a>
     <a href="#experience"><span class="nav-dot"></span>Experience</a>
-    <a href="#projects"><span class="nav-dot"></span>Projects</a>
-    <a href="#rl-demo"><span class="nav-dot"></span>Play My AI</a>
+    <a href="#featured"><span class="nav-dot"></span>Featured Project</a>
+    <a href="#projects"><span class="nav-dot"></span>Other Projects</a>
     <a href="#hackathons"><span class="nav-dot"></span>Hackathons</a>
     <a href="#skills"><span class="nav-dot"></span>Skills</a>
     <a href="#leadership"><span class="nav-dot"></span>Leadership</a>
@@ -327,6 +439,7 @@ section { animation: fadeUp 0.6s ease both; }
 
   <!-- ═══ HOME ═══ -->
   <section id="home">
+    <canvas class="hero-canvas" id="hero-canvas"></canvas>
     <div class="hero-label">Available for AI/ML &amp; Software Engineering Roles</div>
     <h1 class="hero-title">My name is Jordan Hunt.<br><em>I build intelligent systems.</em></h1>
     <p class="hero-bio">
@@ -353,11 +466,10 @@ section { animation: fadeUp 0.6s ease both; }
 
     <div class="edu-card">
       <div class="edu-logo">
-        <!-- To use real logo: replace this SVG with <img src="assets/gt-logo.png" alt="Georgia Tech"> -->
         <img src="assets/gt-logo.png" alt="Georgia Tech">
       </div>
       <div class="edu-body">
-        <h3>Georgia Institute of Technology</h3>
+        <h3><a href="https://www.gatech.edu/" target="_blank">Georgia Institute of Technology</a></h3>
         <div class="edu-meta">O.M.S. Computer Science &middot; Expected May 2028</div>
         <div class="edu-detail">Specialization in AI/Machine Learning. Starting Fall 2026.</div>
       </div>
@@ -365,10 +477,13 @@ section { animation: fadeUp 0.6s ease both; }
     <div class="edu-card">
       <div class="edu-logo">
         <!-- To use real logo: replace this SVG with <img src="assets/tu-logo.png" alt="Tuskegee University"> -->
-        <img src="assets/tu-logo.png" alt="Tuskegee University">
+        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <rect width="52" height="52" rx="10" fill="#8B1A1A"/>
+          <text x="26" y="30" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="700" fill="#FFD700">TU</text>
+        </svg>
       </div>
       <div class="edu-body">
-        <h3>Tuskegee University</h3>
+        <h3><a href="https://www.tuskegee.edu/" target="_blank">Tuskegee University</a></h3>
         <div class="edu-meta">B.S. Computer Science &middot; Expected May 2026 &middot; GPA 3.61</div>
         <div class="edu-detail">Relevant coursework: Data Structures, Linear Algebra, Statistics, Computer Networks, Artificial Intelligence, Software Engineering.</div>
       </div>
@@ -419,32 +534,86 @@ section { animation: fadeUp 0.6s ease both; }
     </div>
   </section>
 
-  <!-- ═══ PROJECTS ═══ -->
-  <section id="projects">
-    <span class="section-label">Projects</span>
-    <h2>What I've Built</h2>
-    <p class="section-desc">From reinforcement learning agents to full-stack AI applications.</p>
+  <!-- ═══ FEATURED PROJECT ═══ -->
+  <section id="featured">
+    <span class="section-label">Featured Project</span>
+    <h2>Optimal Q-Learning Agent</h2>
+    <p class="section-desc">A reinforcement learning agent that learned Tic-Tac-Toe from scratch through self-play and opponent-pool training.</p>
 
-    <div class="projects-grid">
+    <div class="featured-card">
+      <span class="featured-badge">Reinforcement Learning</span>
+      <h3><a href="https://github.com/Jordan-E-Hunt/TicTacToe-RL-Demo" target="_blank">Optimal Q-Learning Agent</a></h3>
+      <p class="featured-desc">
+        Built a near-optimal Q-Learning agent for Tic-Tac-Toe via self-play and opponent-pool training (Temporal Difference + Bellman). Engineered perspective-agnostic state representation and full board symmetry to compress the state-action space by ~6-8x, allowing faster convergence with fewer unique states. Deployed as a real-time human-playable demo.
+      </p>
 
-      <div class="project-card">
-        <h3><a href="https://github.com/Jordan-E-Hunt" target="_blank">Optimal Q-Learning Agent</a></h3>
-        <p class="project-desc">
-          Built a near-optimal Q-Learning agent for Tic-Tac-Toe via self-play training (Temporal Difference + Bellman), reaching ~95% win rate vs. random opponents in 50k episodes. Engineered perspective-agnostic state representation and full board symmetry to compress the state-action space by ~6-8x. Deployed as a real-time human-playable demo using Streamlit.
-        </p>
-        <div class="tech-tags">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">NumPy</span>
-          <span class="tech-tag">Reinforcement Learning</span>
-          <span class="tech-tag">Streamlit</span>
-        </div>
+      <div class="featured-stats">
+        <div><span class="featured-stat-num">~95%</span><span class="featured-stat-label">Win Rate vs. Random</span></div>
+        <div><span class="featured-stat-num">6-8x</span><span class="featured-stat-label">State Compression</span></div>
+        <div><span class="featured-stat-num">4,078</span><span class="featured-stat-label">Learned States</span></div>
       </div>
 
-      <div class="project-card">
+      <div class="tech-tags">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">NumPy</span>
+        <span class="tech-tag">Reinforcement Learning</span>
+        <span class="tech-tag">Q-Learning</span>
+        <span class="tech-tag">Streamlit</span>
+      </div>
+    </div>
+
+    <span class="featured-demo-label">Play against the agent</span>
+
+    <div class="rl-container">
+      <div class="rl-controls">
+        <button class="rl-btn active" id="btn-x" onclick="chooseSide('X')">Play as X (first)</button>
+        <button class="rl-btn" id="btn-o" onclick="chooseSide('O')">Play as O (second)</button>
+        <button class="rl-btn" onclick="resetGame()">New Game</button>
+      </div>
+      <div class="rl-status" id="rl-status">Your move.</div>
+      <div class="rl-board" id="rl-board"></div>
+      <div class="rl-scoreboard">
+        You: <span id="score-wins">0</span> &nbsp; AI: <span id="score-losses">0</span> &nbsp; Draws: <span id="score-draws">0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PROJECTS ═══ -->
+  <section id="projects">
+    <span class="section-label">Other Projects</span>
+    <h2>What Else I've Built</h2>
+    <p class="section-desc">From data analysis to NLP classification.</p>
+
+    <div class="projects-bento">
+
+      <div class="project-card wide">
         <h3><a href="https://github.com/Jordan-E-Hunt/Educational-Attainment-Analysis" target="_blank">Higher Education Retention Analysis</a></h3>
         <p class="project-desc">
-          Collaborated in a 5-person research team to analyze 10 years of federal data across 6 racial demographics affecting college enrollment. Cleaned 3 federal datasets and created 6+ data visualizations using Pandas, Seaborn, and Plotly to identify systemic enrollment barriers.
+          Collaborated in a 5-person research team to analyze 10 years of federal data across 6 racial demographics affecting college enrollment. Cleaned 3 federal datasets and created 6+ data visualizations.
         </p>
+
+        <!-- Data Viz Carousel — images in assets/viz/ -->
+        <div class="project-carousel">
+          <div class="carousel-header">
+            <span class="carousel-label">Data visualizations</span>
+            <span class="carousel-counter" id="viz-counter">1 / 3</span>
+          </div>
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="viz-track">
+              <img src="assets/viz/Attainment_by_Race_2022.png" alt="Educational Attainment by Race in 2022">
+              <img src="assets/viz/Aid_by_Race_2020.png" alt="Percentage of Receiving Aid by Race in 2020">
+              <img src="assets/viz/Black_Ed_Attainment_(All).png" alt="Black Educational Attainment (All)">
+            </div>
+            <button class="carousel-btn prev" onclick="vizPrev()">&lsaquo;</button>
+            <button class="carousel-btn next" onclick="vizNext()">&rsaquo;</button>
+          </div>
+          <div class="carousel-dots">
+            <button class="carousel-dot active" onclick="vizGo(0)"></button>
+            <button class="carousel-dot" onclick="vizGo(1)"></button>
+            <button class="carousel-dot" onclick="vizGo(2)"></button>
+          </div>
+        </div>
+
         <div class="tech-tags">
           <span class="tech-tag">Python</span>
           <span class="tech-tag">Pandas</span>
@@ -466,29 +635,26 @@ section { animation: fadeUp 0.6s ease both; }
         </div>
       </div>
 
-    </div>
-  </section>
+      <div class="project-card">
+        <h3><a href="https://github.com/Jordan-Hxnt/Recipe-Builder" target="_blank">RecipeSnap</a></h3>
+        <p class="project-desc">
+          Mobile-first web app that identifies ingredients from photos using AI vision (Qwen VL 72B via OpenRouter) and generates personalized recipes. Built an image compression pipeline with Pillow and defensive JSON parsing for unreliable LLM outputs.
+        </p>
+        <div style="margin-bottom:14px; font-size:0.8rem;">
+          <a href="https://recipe-builder-0bw3.onrender.com/" target="_blank">Live Demo</a>
+          <span style="color:var(--text-muted); font-size:0.72rem;"> (may take ~30s to wake up on first load)</span>
+          &nbsp;&middot;&nbsp;
+          <a href="https://github.com/Jordan-Hxnt/Recipe-Builder" target="_blank">Source Code</a>
+        </div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">Flask</span>
+          <span class="tech-tag">OpenRouter API</span>
+          <span class="tech-tag">Pillow</span>
+          <span class="tech-tag">Render</span>
+        </div>
+      </div>
 
-  <!-- ═══ RL DEMO ═══ -->
-  <section id="rl-demo">
-    <span class="section-label">Live Demo</span>
-    <h2>Challenge My AI</h2>
-    <p class="section-desc">This agent learned Tic-Tac-Toe through self-play and opponent-pool training using Q-Learning with temporal difference updates, perspective-agnostic state encoding, and board symmetry compression. Think you can beat it?</p>
-
-    <div class="rl-container">
-      <div class="rl-controls">
-        <button class="rl-btn active" id="btn-x" onclick="chooseSide('X')">Play as X (first)</button>
-        <button class="rl-btn" id="btn-o" onclick="chooseSide('O')">Play as O (second)</button>
-        <button class="rl-btn" onclick="resetGame()">New Game</button>
-      </div>
-      <div class="rl-status" id="rl-status">Your move.</div>
-      <div class="rl-board" id="rl-board"></div>
-      <div class="rl-scoreboard">
-        You: <span id="score-wins">0</span> &nbsp; AI: <span id="score-losses">0</span> &nbsp; Draws: <span id="score-draws">0</span>
-      </div>
-      <div style="margin-top:16px;">
-        <a href="https://github.com/Jordan-E-Hunt/TicTacToe-RL-Demo" target="_blank" style="font-size:0.78rem; color:var(--text-muted);">View source &amp; training code &rarr;</a>
-      </div>
     </div>
   </section>
 
@@ -594,7 +760,10 @@ section { animation: fadeUp 0.6s ease both; }
   <section id="contact">
     <span class="section-label">Get in Touch</span>
     <h2>Let's Connect</h2>
-    <p class="section-desc">Open to AI/ML engineering, software engineering roles, research opportunities, and interesting conversations.</p>
+
+    <div class="looking-for">
+      I'm looking for AI/ML or software engineering roles where I can work on real problems with a team that values building over talking. I'm especially drawn to teams working on applied ML, developer tools, or products where AI makes something meaningfully better for users. Open to full-time, internships, and co-ops starting summer 2026.
+    </div>
 
     <div class="contact-row">
       <div class="contact-item"><div class="label">Email</div><a href="mailto:jordan0110hunt@gmail.com">jordan0110hunt@gmail.com</a></div>
@@ -611,6 +780,63 @@ section { animation: fadeUp 0.6s ease both; }
 </main>
 
 <script>
+// ═══ NEURAL NETWORK HERO ANIMATION ═══
+(function() {
+  var canvas = document.getElementById('hero-canvas');
+  var ctx = canvas.getContext('2d');
+  var nodes = [];
+  var nodeCount = 40;
+  var maxDist = 120;
+
+  function resize() {
+    var section = document.getElementById('home');
+    canvas.width = section.offsetWidth;
+    canvas.height = section.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (var i = 0; i < nodeCount; i++) {
+    nodes.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 2 + 1
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < nodes.length; i++) {
+      var a = nodes[i];
+      a.x += a.vx; a.y += a.vy;
+      if (a.x < 0 || a.x > canvas.width) a.vx *= -1;
+      if (a.y < 0 || a.y > canvas.height) a.vy *= -1;
+
+      for (var j = i + 1; j < nodes.length; j++) {
+        var b = nodes[j];
+        var dx = a.x - b.x, dy = a.y - b.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < maxDist) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = 'rgba(110,184,168,' + (0.12 * (1 - dist / maxDist)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(110,184,168,0.25)';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
 function toggleMenu() {
   document.getElementById('sidebar').classList.toggle('open');
 }
@@ -633,6 +859,20 @@ function onScroll() {
 }
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
+
+// ═══ VIZ CAROUSEL ═══
+var vizSlide = 0;
+var vizTotal = 3;
+function vizGo(n) {
+  vizSlide = n;
+  document.getElementById('viz-track').style.transform = 'translateX(-' + (n * 100) + '%)';
+  document.getElementById('viz-counter').textContent = (n + 1) + ' / ' + vizTotal;
+  document.querySelectorAll('.carousel-dot').forEach(function(d, i) {
+    d.className = 'carousel-dot' + (i === n ? ' active' : '');
+  });
+}
+function vizNext() { vizGo((vizSlide + 1) % vizTotal); }
+function vizPrev() { vizGo((vizSlide - 1 + vizTotal) % vizTotal); }
 
 // ═══ RL TIC-TAC-TOE DEMO ═══
 var Q_TABLE = {};
