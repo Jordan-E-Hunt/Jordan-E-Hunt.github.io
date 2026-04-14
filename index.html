@@ -285,6 +285,35 @@ section h2 {
   .projects-bento { grid-template-columns: 1fr; }
 }
 
+/* ─── PROJECT PREVIEW IMAGE ─── */
+.project-preview {
+  border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+.project-preview img {
+  width: 100%; height: auto; display: block; object-fit: cover; max-height: 280px;
+}
+
+/* ─── COLLAPSIBLE CAROUSEL ─── */
+.carousel-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; font-weight: 600; color: var(--accent);
+  cursor: pointer; background: none; border: none; padding: 6px 0;
+  font-family: var(--sans); transition: color 0.2s; margin-bottom: 8px;
+}
+.carousel-toggle:hover { color: var(--accent-warm); }
+.carousel-toggle .arrow {
+  display: inline-block; transition: transform 0.3s; font-size: 0.65rem;
+}
+.carousel-toggle.open .arrow { transform: rotate(90deg); }
+.carousel-collapsible {
+  max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+.carousel-collapsible.open {
+  max-height: 600px; opacity: 1;
+}
+
 /* ─── PROJECT CAROUSEL ─── */
 .project-carousel {
   position: relative; background: var(--bg); border: 1px solid var(--border);
@@ -583,33 +612,59 @@ section { animation: fadeUp 0.6s ease both; }
     <div class="projects-bento">
 
       <div class="project-card wide">
+        <h3><a href="https://github.com/Jordan-Hxnt/Recipe-Builder" target="_blank">RecipeSnap</a></h3>
+        <p class="project-desc">
+          Mobile-first web app that identifies ingredients from photos using AI vision (Qwen VL 72B via OpenRouter) and generates personalized recipes. Built an image compression pipeline with Pillow and defensive JSON parsing for unreliable LLM outputs.
+        </p>
+        <!-- Replace with a real screenshot: assets/recipesnap-preview.png -->
+        <div class="project-preview">
+          <img src="assets/recipesnap-preview.png" alt="RecipeSnap app screenshot">
+        </div>
+        <div style="margin-bottom:14px; font-size:0.8rem;">
+          <a href="https://recipe-builder-0bw3.onrender.com/" target="_blank">Live Demo</a>
+          <span style="color:var(--text-muted); font-size:0.72rem;"> (may take ~30s to wake up on first load)</span>
+          &nbsp;&middot;&nbsp;
+          <a href="https://github.com/Jordan-Hxnt/Recipe-Builder" target="_blank">Source Code</a>
+        </div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">Flask</span>
+          <span class="tech-tag">OpenRouter API</span>
+          <span class="tech-tag">Pillow</span>
+          <span class="tech-tag">Render</span>
+        </div>
+      </div>
+
+      <div class="project-card">
         <h3><a href="https://github.com/Jordan-E-Hunt/Educational-Attainment-Analysis" target="_blank">Higher Education Retention Analysis</a></h3>
         <p class="project-desc">
           Collaborated in a 5-person research team to analyze 10 years of federal data across 6 racial demographics affecting college enrollment. Cleaned 3 federal datasets and created 6+ data visualizations.
         </p>
-
-        <!-- Data Viz Carousel — images in assets/viz/ -->
-        <div class="project-carousel">
-          <div class="carousel-header">
-            <span class="carousel-label">Data visualizations</span>
-            <span class="carousel-counter" id="viz-counter">1 / 3</span>
-          </div>
-          <div class="carousel-viewport">
-            <div class="carousel-track" id="viz-track">
-              <img src="assets/viz/Attainment_by_Race_2022.png" alt="Educational Attainment by Race in 2022">
-              <img src="assets/viz/Aid_by_Race_2020.png" alt="Percentage of Receiving Aid by Race in 2020">
-              <img src="assets/viz/Black_Ed_Attainment_(All).png" alt="Black Educational Attainment (All)">
+        <button class="carousel-toggle" id="viz-toggle" onclick="toggleCarousel()">
+          <span class="arrow">&#9654;</span> View data visualizations
+        </button>
+        <div class="carousel-collapsible" id="viz-collapsible">
+          <div class="project-carousel">
+            <div class="carousel-header">
+              <span class="carousel-label">Data visualizations</span>
+              <span class="carousel-counter" id="viz-counter">1 / 3</span>
             </div>
-            <button class="carousel-btn prev" onclick="vizPrev()">&lsaquo;</button>
-            <button class="carousel-btn next" onclick="vizNext()">&rsaquo;</button>
-          </div>
-          <div class="carousel-dots">
-            <button class="carousel-dot active" onclick="vizGo(0)"></button>
-            <button class="carousel-dot" onclick="vizGo(1)"></button>
-            <button class="carousel-dot" onclick="vizGo(2)"></button>
+            <div class="carousel-viewport">
+              <div class="carousel-track" id="viz-track">
+                <img src="assets/viz/Attainment_by_Race_2022.png" alt="Educational Attainment by Race in 2022">
+                <img src="assets/viz/Aid_by_Race_2020.png" alt="Percentage of Receiving Aid by Race in 2020">
+                <img src="assets/viz/Black_Ed_Attainment_(All).png" alt="Black Educational Attainment (All)">
+              </div>
+              <button class="carousel-btn prev" onclick="vizPrev()">&lsaquo;</button>
+              <button class="carousel-btn next" onclick="vizNext()">&rsaquo;</button>
+            </div>
+            <div class="carousel-dots">
+              <button class="carousel-dot active" onclick="vizGo(0)"></button>
+              <button class="carousel-dot" onclick="vizGo(1)"></button>
+              <button class="carousel-dot" onclick="vizGo(2)"></button>
+            </div>
           </div>
         </div>
-
         <div class="tech-tags">
           <span class="tech-tag">Python</span>
           <span class="tech-tag">Pandas</span>
@@ -628,26 +683,6 @@ section { animation: fadeUp 0.6s ease both; }
           <span class="tech-tag">Scikit-learn</span>
           <span class="tech-tag">TF-IDF</span>
           <span class="tech-tag">NLP</span>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <h3><a href="https://github.com/Jordan-Hxnt/Recipe-Builder" target="_blank">RecipeSnap</a></h3>
-        <p class="project-desc">
-          Mobile-first web app that identifies ingredients from photos using AI vision (Qwen VL 72B via OpenRouter) and generates personalized recipes. Built an image compression pipeline with Pillow and defensive JSON parsing for unreliable LLM outputs.
-        </p>
-        <div style="margin-bottom:14px; font-size:0.8rem;">
-          <a href="https://recipe-builder-0bw3.onrender.com/" target="_blank">Live Demo</a>
-          <span style="color:var(--text-muted); font-size:0.72rem;"> (may take ~30s to wake up on first load)</span>
-          &nbsp;&middot;&nbsp;
-          <a href="https://github.com/Jordan-Hxnt/Recipe-Builder" target="_blank">Source Code</a>
-        </div>
-        <div class="tech-tags">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">Flask</span>
-          <span class="tech-tag">OpenRouter API</span>
-          <span class="tech-tag">Pillow</span>
-          <span class="tech-tag">Render</span>
         </div>
       </div>
 
@@ -857,6 +892,13 @@ window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
 // ═══ VIZ CAROUSEL ═══
+function toggleCarousel() {
+  var btn = document.getElementById('viz-toggle');
+  var panel = document.getElementById('viz-collapsible');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
 var vizSlide = 0;
 var vizTotal = 3;
 function vizGo(n) {
